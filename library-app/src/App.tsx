@@ -1,11 +1,15 @@
-
 import './App.css';
+import Carousel from './Layouts/HomePage/Carousel';
+import ExploreTopBooks from './Layouts/HomePage/ExploreTopBooks';
+import Navbar from './Layouts/NavbarAndFooter/Navbar';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Well Come to Full Stack Course :  -)</h1>
-    </div>
+    <>
+      <Navbar/>
+      <ExploreTopBooks/>
+      <Carousel/> 
+    </>
   );
 }
 
