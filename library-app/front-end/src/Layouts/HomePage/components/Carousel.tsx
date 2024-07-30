@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReturnBook from './ReturnBook';
 import {BookModel} from "../../../models/BookModel";
 import { error } from 'console';
+import { ok } from 'assert';
 
 
 function Carousel() {
@@ -13,6 +14,36 @@ function Carousel() {
 
     useEffect(()=>{
         const fetchBook = async () =>{
+                const baseUrl = "http://localhost:8000/api/books";
+                const url : string = `${baseUrl}?page=0`
+
+                const response = await fetch(url);
+
+                if(!response.ok){
+                    throw new Error("Something went wrong");
+                }
+
+                const resultJson = await response.json();
+                const responseData = resultJson._embedded.books;
+
+                const loadedbooks :  BookModel[] = [];
+
+                for (const key in responseData){
+                    loadedbooks.push({
+                        id : responseData[key].id,
+                        title : responseData[key].title,
+                        author : responseData[key].author,
+                        description : responseData[key].description,
+                        copies : responseData[key].copies,
+                        copiesAvaible : responseData[key].copiesAvaible,
+                        category : responseData[key].category,
+                        img : responseData[key].img,
+                        
+                    })
+                }
+
+                setBooks(loadedbooks)
+                setIsLoading(false)
 
         }
         fetchBook().catch((error : any) =>{
@@ -20,6 +51,21 @@ function Carousel() {
             setHttpError(error.message)
         })
     } , [])
+
+    if(isLoading){
+        return(
+            <div className=' container mt-5'>
+                <p >Yükleniyor...</p>
+            </div>
+        )
+    }
+    if(httpError){
+        return(
+            <div className='container m-5'>
+                <p>{httpError}</p>
+            </div>
+        )
+    }
 
     return (
         <div className='container mt-5' style={{ height: 550 }}>
