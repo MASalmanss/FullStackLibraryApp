@@ -2,6 +2,7 @@ package com.Salman.library.LibraryApi.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "book")
