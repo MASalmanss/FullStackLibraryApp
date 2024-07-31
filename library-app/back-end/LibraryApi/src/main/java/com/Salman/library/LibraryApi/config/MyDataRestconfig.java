@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 public class MyDataRestconfig implements RepositoryRestConfigurer {
-    private String theAllowingOrigins = "http://localhost:9000";
+    private String theAllowingOrigins = "http://localhost:3000";
 
 
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration configuration , CorsRegistry cors){
