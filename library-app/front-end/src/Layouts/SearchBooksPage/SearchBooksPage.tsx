@@ -2,17 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { BookModel } from '../../models/BookModel';
 import Spinner from '../Utils/Spinner';
 import { SearchBook } from './components/SearchBook';
+import { Pagination } from '../Utils/Pagination';
 
 function SearchBooksPage() {
 
     const [books, setBooks] = useState<BookModel[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [booksPerPage, setBooksPerPage] = useState(5);
+    const [totalAmountOfBooks, setTotalAmountOfBooks] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
         const fetchBook = async () => {
             const baseUrl = "http://localhost:9000/api/books";
-            const url: string = `${baseUrl}?page=0&size=5`;
+            const url: string = `${baseUrl}?page=${currentPage - 1}&size=${booksPerPage}`;
 
             const response = await fetch(url);
 
@@ -28,6 +33,9 @@ function SearchBooksPage() {
 
             const resultJson = await response.json();
             const responseData = resultJson._embedded.books;
+
+            setTotalAmountOfBooks(resultJson.page.totalElements);
+            setTotalPages(resultJson.page.totalPages);
 
             const loadedbooks: BookModel[] = [];
 
@@ -56,7 +64,9 @@ function SearchBooksPage() {
             setIsLoading(false);
             setHttpError(error.message)
         })
-    }, [])
+
+        window.scrollTo(0,0)
+    }, [currentPage])
 
     if (isLoading) {
         return (
@@ -71,7 +81,13 @@ function SearchBooksPage() {
         )
     }
 
+    const indexOfLastBook : number = currentPage * booksPerPage;
+    const indexOfFirstBook : number = indexOfLastBook - booksPerPage;
+    let lastItem = booksPerPage * currentPage <= totalAmountOfBooks ? booksPerPage * currentPage : totalAmountOfBooks;
 
+    const paginate =(pageNumber : number) =>{
+        setCurrentPage(pageNumber)
+    }
 
     return (
         <div>
@@ -120,14 +136,16 @@ function SearchBooksPage() {
                         </div>
                     </div>
                     <div className='mt-3'>
-                        <h5>Sonuç sayısı : (22)</h5>
+                        <h5>Sonuç sayısı : ({totalAmountOfBooks})</h5>
                     </div>
                     <p>
-                        1 den 5 kadar 22 içinde
+                        {indexOfFirstBook + 1 } den {lastItem} kadar {totalAmountOfBooks} içinde
                     </p>
                     {books.map(book =>(
                         <SearchBook book = {book} key = {book.id}/>
                     ))}
+
+                    {totalPages > 1 && <Pagination currentPage = {currentPage} totalPages={totalPages} paginate={paginate} />}
                 </div>
             </div>
             <br />
