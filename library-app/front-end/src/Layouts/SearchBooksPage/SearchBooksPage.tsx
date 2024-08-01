@@ -13,11 +13,19 @@ function SearchBooksPage() {
     const [booksPerPage, setBooksPerPage] = useState(5);
     const [totalAmountOfBooks, setTotalAmountOfBooks] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [search , setSearch] = useState("");
+    const [searchUrl , setSearchUrl] = useState("");
 
     useEffect(() => {
         const fetchBook = async () => {
             const baseUrl = "http://localhost:9000/api/books";
-            const url: string = `${baseUrl}?page=${currentPage - 1}&size=${booksPerPage}`;
+            let url: string = "";
+            
+            if(searchUrl === ""){
+                url = `${baseUrl}?page=${currentPage - 1}&size=${booksPerPage}`;
+            }else{
+                url = baseUrl + searchUrl;
+            }
 
             const response = await fetch(url);
 
@@ -52,7 +60,7 @@ function SearchBooksPage() {
 
 
                 })
-                console.log(responseData[key].image);
+                
 
             }
 
@@ -66,7 +74,7 @@ function SearchBooksPage() {
         })
 
         window.scrollTo(0,0)
-    }, [currentPage])
+    }, [currentPage , searchUrl])
 
     if (isLoading) {
         return (
@@ -79,6 +87,16 @@ function SearchBooksPage() {
                 <p>{httpError}</p>
             </div>
         )
+    }
+    const searchHandleChange = ()=>{
+        if(search ===""){
+            setSearch("")
+        } else {
+            console.log("Çalıştı 2");
+            
+            //http://localhost:9000/api/books/search/findByTitleContaining?title=guru&page=0&size=5
+            setSearchUrl(`/search/findByTitleContaining?title=${search}&page=0&size=${booksPerPage}`)
+        }
     }
 
     const indexOfLastBook : number = currentPage * booksPerPage;
@@ -95,8 +113,9 @@ function SearchBooksPage() {
                 <div className='row mt-5'>
                     <div className='col-6'>
                         <div className='d-flex'>
-                            <input type="search" className='form-control' placeholder='Search' aria-labelledby='Search' />
-                            <button className='btn btn-outline-success ms-1'>
+                            <input type="search" className='form-control' placeholder='Search' aria-labelledby='Search' onChange={e => setSearch(e.target.value) } />
+                            <button className='btn btn-outline-success ms-1' onClick={()=> {searchHandleChange(); console.log("Çalıştı");
+                            }}>
                                 Ara
                             </button>
                         </div>
