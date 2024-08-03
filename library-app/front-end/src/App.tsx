@@ -1,3 +1,4 @@
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import HomePage from './Layouts/HomePage/HomePage';
 import Footer from './Layouts/NavbarAndFooter/Footer';
@@ -7,11 +8,15 @@ import SearchBooksPage from './Layouts/SearchBooksPage/SearchBooksPage';
 export const App = () => {
   return (
     <>
-      <Navbar/>
+      <Navbar />
+      <Route path="/" >
+        <HomePage />
+      </Route>
+      <Route path="/search">
+        <SearchBooksPage />
+      </Route>
 
-      {/* <HomePage/> */}
-      <SearchBooksPage/>
-      <Footer/>
+      <Footer />
     </>
   );
 }
