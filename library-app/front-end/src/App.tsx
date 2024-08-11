@@ -7,7 +7,8 @@ import SearchBooksPage from './Layouts/SearchBooksPage/SearchBooksPage';
 
 export const App = () => {
   return (
-    <>
+   <div className='d-flex flex-column min-vh-100'>
+    
       <Navbar />
       <Switch>
 
@@ -26,6 +27,6 @@ export const App = () => {
 
       </Switch>
       <Footer />
-    </>
+      </div>
   );
 }

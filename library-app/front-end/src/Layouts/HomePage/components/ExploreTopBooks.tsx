@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function ExploreTopBooks() {
   return (
@@ -7,9 +8,9 @@ function ExploreTopBooks() {
             <div>
                 <h1 className='display-5 fw-bold '>Yeni bir maceraya atıl !</h1>
                 <p className='col-md-8 fs-4'>Nereden Başlamak istersin ?</p>
-                <a type='button' className='btn main-color btn-lg text-white' href="#">
+                <Link type='button' className='btn main-color btn-lg text-white'to="/search">
                     Tüm kitapları keşfet
-                </a>
+                </Link>
             </div>
         </div>
     </div>
